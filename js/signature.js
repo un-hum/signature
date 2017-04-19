@@ -1,67 +1,97 @@
-!(function(){
-	window.addEventListener('load',function(){
-		var _signature = document.querySelector('#signature') ? document.querySelector('#signature') : document.querySelector('.signature');
-		var canvasInfo = {
-			width:_signature.getAttribute('width') ? _signature.getAttribute('width') : 500,
-			height:_signature.getAttribute('height') ? _signature.getAttribute('height') : 800,
-			color:_signature.getAttribute('color') ? _signature.getAttribute('color') : 'black',
-			lineWidth:_signature.getAttribute('lineWidth') ? parseInt(_signature.getAttribute('lineWidth')) : 1,
-			lastX:0,
-			lastY:0,
+var signature = new _signature()
+
+function _signature(){
+	this.dom = {};
+	this.width = 0;
+	this.height = 0;
+	this.color = '';
+	this.lineWidth = 0;
+}
+
+_signature.prototype.fnMove = function(event){
+	var e = event || window.event;
+	var x = e.clientX - this.canvas.offsetLeft;
+	var y = e.clientY - this.canvas.offsetTop;
+	this.pen.lineTo(x,y);
+	this.pen.stroke();	
+}
+
+_signature.prototype.fnDown = function(event){
+	var e = event || window.event;	
+	var x = e.clientX - this.canvas.offsetLeft;
+	var y = e.clientY - this.canvas.offsetTop;
+	//初始化"画笔"
+	this.pen = this.canvas.getContext('2d')
+	//绘制开始
+	this.pen.beginPath();
+	this.pen.strokeStyle = this.canvas.color;
+    this.pen.fillStyle = this.canvas.color;
+    this.pen.lineWidth = this.canvas.lineWidth;
+	this.pen.lineTo(x,y);
+
+	var _this = this
+
+	//创建用户滑动轨迹
+	document.onmousemove = function(event){
+		_this.fnMove()
+	}	
+
+	//终止签名
+	window.addEventListener('mouseup',function(){
+		_this.fnUp()
+	})	
+}
+
+_signature.prototype.fnUp = function(){
+	this.pen.closePath();			
+	document.onmousemove = '';
+}
+
+_signature.prototype.createCanvas = function(ele){
+	var c = document.createElement('canvas');
+	c.innerHTML = '请升级您的浏览器或者更换您的浏览器。';		
+	c.style.background = ele.bg
+	c.width = ele.width;
+	c.height = ele.height;
+	document.querySelector(ele.dom).appendChild(c);
+	ele.canvas = c
+}
+
+_signature.prototype.init = function(params){
+	if(params.dom){
+		this.dom = params.dom;
+		this.width = params.width ? params.width : document.querySelector(this.dom).offsetWidth;
+		this.height = params.height ? params.height : document.querySelector(this.dom).offsetHeight;
+		this.theme = params.theme ? params.theme : 'WB';//WB：经典黑线白底 BW：白线黑底
+		this.lineWidth = params.lineWidth;		
+		switch(this.theme){
+			case 'WB':				
+				this.color = 'black'
+				this.bg = 'white'
+				console.log(this.bg)
+			break;
+			case 'BW':
+				this.color = 'white'
+				this.bg = 'black'				
+			break;
+			default:
+				this.color = 'black'
+				this.bg = 'white'	
+			break;
 		}
-		
-		//初始化画布
-		createCanvas();
-		//获得canvas元素
-		var canvas = document.querySelector('#signature canvas') ? document.querySelector('#signature canvas') : document.querySelector('.signature canvas');
-		var context = canvas.getContext('2d');
-		//记录用户单击鼠标
-		canvas.onmousedown = function(event){
-			var e = event || window.event;		
-			var x = e.clientX - canvas.offsetLeft;
-			var y = e.clientY - canvas.offsetTop;
-			//绘制开始
-			context.beginPath();
-			context.strokeStyle = canvasInfo.color;
-		    context.fillStyle = canvasInfo.color;
-		    context.lineWidth = canvasInfo.lineWidth;
-			context.lineTo(x,y);
-			//创建用户滑动轨迹
-			document.onmousemove = function(event){
-				var e = event || window.event;
-				var x = e.clientX - canvas.offsetLeft;
-				var y = e.clientY - canvas.offsetTop;
-				context.lineTo(x,y);
-				context.stroke();
-				//记录绘制的点
-				canvasInfo = {
-					lastX:x,
-					lastY:y,
-				}
-			}
+		this.color = params.color ? params.color : this.color
+		this.bg = params.bg	? params.bg : this.bg		
+
+		// 初始化canvas
+		this.createCanvas(this)
+
+		var _this = this
+
+		this.canvas.onmousedown = function(){
+			_this.fnDown()
 		}
-		//终止签名
-		canvas.onmouseup = function(){
-			context.closePath();			
-			document.onmousemove = '';
-		}
-		
-		//绘制触点圆
-		function brushwork(x,y){
-			context.beginPath();
-			context.arc(x,y,canvasInfo.lineWidth/2,0,Math.PI*2,true);
-			context.closePath();
-			context.fillStyle = canvasInfo.color;
-			context.fill();
-		}
-		
-		//初始化配置并创建canvas
-		function createCanvas(){
-			var c = document.createElement('canvas');
-			c.innerHTML = '请升级您的浏览器或者更换您的浏览器。';
-			c.width = canvasInfo.width;
-			c.height = canvasInfo.height;
-			_signature.appendChild(c);
-		}	
-	})
-})()
+	}else{
+		alert('please add Document')
+	}
+}	
+

@@ -9,16 +9,29 @@
 				margin-top: 20px;
 			}
 			
-			.signature-div canvas{
-				border: solid 1px black;
-				border-radius: 3px;
+			*{
+				padding: 0;
+				margin: 0
+			}
+
+			body{
+				background: #ccc
+			}
+
+			.signature-div{
+				height: 800px;
+				width: 1000px;
+				margin:30px auto;
 			}			
-		</style>
-		<script src="js/signature.js"></script>
+		</style>		
 	</head>
 	<body>
-		<div class="signature-div signature col-top-20" width="1000" height="500" color="red" lineWidth="1">
-			
-		</div>		
+		<div class="signature-div signature col-top-20"></div>	
+		<script src="js/signature.js"></script>	
+		<script>
+			signature.init({
+				dom:'.signature'
+			})
+		</script>		
 	</body>
 </html>
