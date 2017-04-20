@@ -9,13 +9,13 @@ function _signature(){
 	this.lineWidth = 0;
 	this.follow = false;
 	this.console = false;
-	this.iStyle = 'cursor:pointer;display:block;margin-bottom:10.5px;float:left;margin-right:5px;font-size:14px'
+	this.iStyle = 'cursor:pointer;display:block;margin-bottom:10.5px;float:left;margin-right:10px;font-size:14px'
 }
 
 var tools = [
-	'color',
-	'pencil',	
-	'paint-brush'
+	{icon:'fa-th-large',name:'color'},
+	{icon:'fa-pencil',name:'pencil'},	
+	{icon:'fa-paint-brush',name:'paint-brush'}
 ]
 
 // 获取滚动条信息
@@ -72,6 +72,7 @@ _signature.prototype.fnUp = function(){
 
 _signature.prototype.create = function(ele){
 	if(this.console){
+		var tool = `<i onclick="signature.refresh()" style="`+this.iStyle+`" class="fa-refresh fa">  refresh</i>`
 		var div = document.createElement('div')
 		div.classList.add('signature-console')
 		div.style.minHeight = 'calc(37px - 12px)'
@@ -80,7 +81,11 @@ _signature.prototype.create = function(ele){
 		div.style.textAlign = 'left'
 		div.style.padding = '12px 10px 0px 10px'
 		div.style.borderBottom = 'solid 1px #ddd'
-		div.innerHTML = `<i onclick="signature.refresh()" style="`+this.iStyle+`" class="fa-refresh fa">&nbsp;refresh</i>`		
+		// 初始化工具栏
+		for(var i = 0;i<tools.length;i++){
+			tool += `<i onclick="" style="` + this.iStyle + `" class="` + tools[i].icon + ` fa">  ` + tools[i].name + `</i>`
+		}
+		div.innerHTML = tool		
 		document.querySelector(ele.dom).appendChild(div);
 	}
 	var c = document.createElement('canvas');
