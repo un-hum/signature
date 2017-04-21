@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>signature</title>
+		<link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">		
+		<link rel="stylesheet" href="../signature.css">
+		<script src="../signature.js"></script>	
+		<style>
+			.col-top-20{
+				margin-top: 20px;
+			}
+
+			body{
+				background: #ccc
+			}
+
+			*{
+				padding: 0;
+				margin: 0
+			}
+
+			.signature-div{
+				height: 800px;
+				width: 1000px;
+				margin:30px auto;
+			}			
+
+
+			#signature,.signature{
+				text-align: center;
+			}
+		</style>		
+	</head>
+	<body>
+		<div class="signature-div signature col-top-20"></div>					
+		<script>
+			signature.init({
+				dom:'.signature'		
+			})		
+		</script>		
+	</body>
+</html>
