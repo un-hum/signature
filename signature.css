@@ -1,0 +1,27 @@
+.signature-console{
+	min-height: calc(37px - 7px);
+	width: calc(100% - 10px);
+	background: white;
+	text-align: left;
+	padding: 7px 5px 0px 5px;
+	border-bottom: solid 1px #ddd;
+}
+
+.signature-console i{
+	border-radius: 5px;
+	padding: 4px;
+	cursor:pointer;
+	display:block;
+	float:left;
+	margin-bottom: 7.5px;
+	margin-right:6px;
+	font-size:14px
+}
+
+.signature-console span{
+	margin-left:8px
+}
+
+.signature-console .active{
+	background: #edf0ee
+}

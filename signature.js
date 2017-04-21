@@ -8,14 +8,13 @@ function _signature(){
 	this.color = '';
 	this.lineWidth = 0;
 	this.follow = false;
-	this.console = false;
-	this.iStyle = 'cursor:pointer;display:block;margin-bottom:10.5px;float:left;margin-right:10px;font-size:14px'
+	this.console = false;	
 }
 
 var tools = [
-	{icon:'fa-th-large',name:'color'},
-	{icon:'fa-pencil',name:'pencil'},	
-	{icon:'fa-paint-brush',name:'paint-brush'}
+	{icon:'fa-refresh',name:'refresh',fn:'signature.refresh()'},
+	{icon:'fa-th-large',name:'color',fn:''},
+	{icon:'fa-paint-brush',name:'paint-brush',fn:'signature.setConfig("lineWidth",10,this)'}
 ]
 
 // 获取滚动条信息
@@ -72,20 +71,17 @@ _signature.prototype.fnUp = function(){
 
 _signature.prototype.create = function(ele){
 	if(this.console){
-		var tool = `<i onclick="signature.refresh()" style="`+this.iStyle+`" class="fa-refresh fa">  refresh</i>`
 		var div = document.createElement('div')
 		div.classList.add('signature-console')
-		div.style.minHeight = 'calc(37px - 12px)'
-		div.style.width = 'calc(100% - 20px)'
-		div.style.background = 'white'
-		div.style.textAlign = 'left'
-		div.style.padding = '12px 10px 0px 10px'
-		div.style.borderBottom = 'solid 1px #ddd'
 		// 初始化工具栏
 		for(var i = 0;i<tools.length;i++){
-			tool += `<i onclick="" style="` + this.iStyle + `" class="` + tools[i].icon + ` fa">  ` + tools[i].name + `</i>`
+			var _i = document.createElement('i')
+			_i.setAttribute('onclick',tools[i].fn)
+			_i.classList.add(tools[i].icon)
+			_i.classList.add('fa')
+			_i.innerHTML = '<span>' + tools[i].name + '</span>'
+			div.appendChild(_i)
 		}
-		div.innerHTML = tool		
 		document.querySelector(ele.dom).appendChild(div);
 	}
 	var c = document.createElement('canvas');
@@ -103,6 +99,21 @@ _signature.prototype.refresh = function(){
 	}	
 }
 
+_signature.prototype.active = function(ele){
+	ele.classList.contains('active') ? ele.classList.remove('active') : ele.classList.add('active')
+}
+
+_signature.prototype.setConfig = function(params,num,ele){
+	var _this = this
+	if(ele.classList.contains('active')){
+		ele.classList.remove('active')
+		_this[params] = _this.tmp[params]			
+	}else{
+		ele.classList.add('active')	
+        _this[params] = num	
+	}
+}
+
 _signature.prototype.config = function(params){
 	var _this = this
 	params.dom ? function(){
@@ -117,15 +128,15 @@ _signature.prototype.config = function(params){
 }
 
 _signature.prototype.init = function(params){
-	if(params.dom){
+	if(params.dom){		
 		this.dom = params.dom;
 		this.width = params.width ? params.width : document.querySelector(this.dom).offsetWidth;
 		this.height = params.height ? params.height : document.querySelector(this.dom).offsetHeight;
 		this.theme = params.theme ? params.theme : 'WB';//WB：经典黑线白底 BW：白线黑底
-		this.lineWidth = params.lineWidth ? params.lineWidth : 1;		
-		this.tmp = {};
+		this.lineWidth = params.lineWidth ? params.lineWidth : 1			
 		this.follow = params.follow ? true : false;
 		this.console = params.console == false ? false : true
+		this.tmp = {}
 		switch(this.theme){
 			case 'WB':				
 				this.color = 'black'
@@ -146,6 +157,10 @@ _signature.prototype.init = function(params){
 		// 初始化canvas
 		this.create(this)
 
+		// 记录原有属性
+		for(var x in this){
+			this.tmp[x] = this[x]
+		}		
 		var _this = this
 
 		this.canvas.onmousedown = function(event){			
