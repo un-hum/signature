@@ -20,7 +20,15 @@ var tools = [
 var color_list = [
 	{color:'white',name:'白色'},
 	{color:'black',name:'黑色'},
-	{color:'yellow',name:'黄色'}
+	{color:'yellow',name:'黄色'},
+	{color:'#ffd700',name:'金黄色'},
+	{color:'#292421',name:'象牙黑'},
+	{color:'#ffffcd',name:'白杏仁'},
+	{color:'#d2691e',name:'巧克力色'},
+	{color:'#9933fa',name:'淡紫色'},
+	{color:'blue',name:'蓝色'},
+	{color:'red',name:'红色'},
+	{color:'#b03060',name:'栗色'},
 ]
 
 // 获取滚动条信息
@@ -32,6 +40,18 @@ function getScrollInfo(params){
         scroll=document.body[params];  
     }  
     return scroll;  
+}
+
+//取消事件冒泡
+function stopBubble(e){
+  //一般用在鼠标或键盘事件上
+  if(e && e.stopPropagation){
+  	//W3C取消冒泡事件
+  	e.stopPropagation();
+  }else{
+  	//IE取消冒泡事件
+  	window.event.cancelBubble = true;
+  }
 }
 
 _signature.prototype.fnMove = function(event){	
@@ -105,22 +125,69 @@ _signature.prototype.refresh = function(){
 	}	
 }
 
-_signature.prototype.active = function(ele){
-	ele.classList.contains('active') ? ele.classList.remove('active') : ele.classList.add('active')
+_signature.prototype.active = function(ele,status,fn){
+	if(status){
+		fn()
+	}else{
+		ele.classList.contains('active') ? ele.classList.remove('active') : ele.classList.add('active')
+	}
+}
+
+_signature.prototype.selectColor = function(ele,color,event){
+	var e = event || window.event
+	var _this = this
+	// 取消事件冒泡
+	stopBubble(e)	
+	ele.classList.contains('select') ? function(){
+			ele.classList.remove('select')
+			_this.color = _this.tmp.color
+	}() : function(){
+		for(var i = 0;i < document.querySelectorAll('.signature-set-color > div').length;i++){
+			document.querySelectorAll('.signature-set-color > div')[i].classList.remove('select')	
+		}
+		document.querySelector('.signature-set-color').style.display = 'none';
+		_this.color = color
+		ele.classList.add('select')
+	}()
 }
 
 _signature.prototype.setColor = function(ele){
-	this.active(ele)
-	// 创建颜色框
-	var div = document.createElement('div')
-	div.classList.add('signature-set-color')
-	ele.appendChild(div)
+	// 添加样式
+	this.active(ele,true,function(){
+		if(document.querySelector('.signature-set-color .select')){
+			ele.querySelector('.signature-set-color').style.display = 'block'
+		}else{
+			ele.classList.contains('active') ? ele.classList.remove('active') : ele.classList.add('active')
+		}
+	})
+	if(ele.classList.contains('active')){		
+		if(ele.querySelector('.signature-set-color')){
+			ele.querySelector('.signature-set-color').style.display = 'block'
+		}else{
+			// 创建颜色框
+			var div = document.createElement('div')		
+			div.classList.add('signature-set-color')
+			div.style.width = this.width / 3 + 'px'
+			for(var i = 0;i<color_list.length;i++){
+				var color = document.createElement('div')
+				color.classList.add('color')
+				color.title = color_list[i].name
+				color.setAttribute('onclick','signature.selectColor(this,"' + color_list[i].color + '",event)')
+				color.style.background = color_list[i].color				
+				div.appendChild(color)
+			}
+			ele.appendChild(div)
+		}
+	}else{		
+		ele.querySelector('.signature-set-color').style.display = 'none'
+		this.color = this.tmp.color
+	}
 }
 
 _signature.prototype.setConfig = function(params,num,ele){
 	var _this = this
 	if(ele.classList.contains('active')){
-		ele.classList.remove('active')
+		ele.classList.remove('active')		
 		_this[params] = _this.tmp[params]			
 	}else{
 		ele.classList.add('active')	
@@ -129,13 +196,11 @@ _signature.prototype.setConfig = function(params,num,ele){
 }
 
 _signature.prototype.config = function(params){
-	var _this = this
 	params.dom ? function(){
 		alert('禁止修改dom')
 		return
 	}() : function(){
-		for(var p in params){			
-			_this.tmp[p] = _this[p]							
+		for(var p in params){									
 			_this[p] = params[p]
 		}
 	}()

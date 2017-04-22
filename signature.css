@@ -33,7 +33,7 @@
 	background: white;
 	position: absolute;
 	left: 0;
-	top: 32px;
+	top: 29px;
 	border-radius: 3px
 }
 
@@ -50,3 +50,17 @@
 	-webkit-transform:rotate(45deg);
 	-moz-transform:rotate(45deg);
 }
+
+.signature-set-color .color{
+	width: 30px;
+	height: 30px;
+	border-radius: 3px;
+	margin: 2px;
+	float: left;
+}
+
+.signature-set-color .select{
+	-webkit-transform:scale(1.1);
+	-moz-transform:scale(1.1);	
+}
+
