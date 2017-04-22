@@ -13,8 +13,14 @@ function _signature(){
 
 var tools = [
 	{icon:'fa-refresh',name:'refresh',fn:'signature.refresh()'},
-	{icon:'fa-th-large',name:'color',fn:''},
+	{icon:'fa-th-large',name:'color',fn:'signature.setColor(this)'},
 	{icon:'fa-paint-brush',name:'paint-brush',fn:'signature.setConfig("lineWidth",10,this)'}
+]
+
+var color_list = [
+	{color:'white',name:'白色'},
+	{color:'black',name:'黑色'},
+	{color:'yellow',name:'黄色'}
 ]
 
 // 获取滚动条信息
@@ -101,6 +107,14 @@ _signature.prototype.refresh = function(){
 
 _signature.prototype.active = function(ele){
 	ele.classList.contains('active') ? ele.classList.remove('active') : ele.classList.add('active')
+}
+
+_signature.prototype.setColor = function(ele){
+	this.active(ele)
+	// 创建颜色框
+	var div = document.createElement('div')
+	div.classList.add('signature-set-color')
+	ele.appendChild(div)
 }
 
 _signature.prototype.setConfig = function(params,num,ele){
