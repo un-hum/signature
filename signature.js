@@ -203,7 +203,7 @@ _signature.prototype = {
 				ele.classList.remove('active')
 				document.querySelector(_this.dom).classList.remove('signature-full')
 				_this.canvas.width = _this.tmp.width
-				_this.canvas.height = _this.tmp.height
+				_this.canvas.height = _this.console ? _this.tmp.height - 38 : _this.tmp.height;
 			}else{
 				ele.classList.add('active')
 				if(w == 'all'){
