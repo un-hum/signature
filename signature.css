@@ -59,6 +59,15 @@
 	float: left;
 }
 
+.signature-full{
+	position: fixed;
+	margin: 0 !important;
+	left: 0;
+	top: 0;
+	width: 100% !important;
+	height: 100% !important;
+}
+
 .signature-set-color .select{
 	-webkit-transform:scale(1.1);
 	-moz-transform:scale(1.1);	

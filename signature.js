@@ -12,7 +12,8 @@ function _signature(){
 var tools = [
 	{icon: 'fa-refresh',name: 'refresh',fn: 'signature.refresh()'},
 	{icon: 'fa-th-large',name: 'color',fn: 'signature.setColor(this)'},
-	{icon: 'fa-paint-brush',name: 'paint-brush',fn: 'signature.setConfig("lineWidth",10,this)'}
+	{icon: 'fa-paint-brush',name: 'paint-brush',fn: 'signature.setConfig("lineWidth",10,this)'},
+	{icon: 'fa-arrows-alt',name: 'arrows-alt',fn:'signature.resize(this,"all")'}
 ]
 
 var color_list = [
@@ -194,6 +195,29 @@ _signature.prototype = {
 				_this[p] = params[p]
 			}
 		}()
+	},
+	resize:function(ele,w,j){
+		var _this = this
+		_this.active(ele,true,function(){
+			if(ele.classList.contains('active')){
+				ele.classList.remove('active')
+				document.querySelector(_this.dom).classList.remove('signature-full')
+				_this.canvas.width = _this.tmp.width
+				_this.canvas.height = _this.tmp.height
+			}else{
+				ele.classList.add('active')
+				if(w == 'all'){
+					document.querySelector(_this.dom).classList.add('signature-full')
+					_this.canvas.width  = document.documentElement.clientWidth
+					_this.canvas.height = document.documentElement.clientHeight - 38
+				}else{
+					document.querySelector(_this.dom).style.width  = w;
+					document.querySelector(_this.dom).style.height = h;
+					_this.canvas.width  = document.documentElement.clientWidth
+					_this.canvas.height = document.documentElement.clientHeight - 38
+				}				
+			}
+		})		
 	},
 	init:function(params){
 		if(params.dom){		
