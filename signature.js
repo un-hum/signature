@@ -12,6 +12,7 @@ function _signature(){
 var tools = [
 	{icon: 'fa-refresh',name: 'refresh',fn: 'signature.refresh()'},
 	{icon: 'fa-th-large',name: 'color',fn: 'signature.setColor(this)'},
+	{icon: 'fa-eraser',name: 'eraser',fn: ''},
 	{icon: 'fa-paint-brush',name: 'paint-brush',fn: 'signature.setConfig("lineWidth",10,this)'},
 	{icon: 'fa-arrows-alt',name: 'arrows-alt',fn:'signature.resize(this,"all")'}
 ]
