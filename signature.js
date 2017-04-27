@@ -12,7 +12,7 @@ function _signature(){
 var tools = [
 	{icon: 'fa-refresh',name: 'refresh',fn: 'signature.refresh()'},
 	{icon: 'fa-th-large',name: 'color',fn: 'signature.setColor(this)'},
-	{icon: 'fa-eraser',name: 'eraser',fn: ''},
+	{icon: 'fa-eraser',name: 'eraser',fn: 'signature.toggleEraser(this)'},
 	{icon: 'fa-paint-brush',name: 'paint-brush',fn: 'signature.setConfig("lineWidth",10,this)'},
 	{icon: 'fa-arrows-alt',name: 'arrows-alt',fn:'signature.resize(this,"all")'}
 ]
@@ -92,6 +92,14 @@ _signature.prototype = {
 	fnUp:function(){
 		this.pen.closePath();			
 		document.onmousemove = '';
+	},
+	createArc:function(event){
+		var e = event || window.event
+		pen.beginPath();
+		pen.arc(e.clientX, e.clientY, this.tmp.lineWidth/2, 0, Math.PI * 2, true);
+		pen.closePath();
+		pen.fillStyle = this.tmp.bg
+		pen.fill();
 	},
 	create:function(ele){
 		if(this.console){
@@ -222,13 +230,14 @@ _signature.prototype = {
 	},
 	init:function(params){
 		if(params.dom){		
-			this.dom       = params.dom;
-			this.width     = params.width ? params.width : document.querySelector(this.dom).offsetWidth;
-			this.height    = params.height ? params.height : document.querySelector(this.dom).offsetHeight;
-			this.theme     = params.theme ? params.theme : 'WB';//WB：经典黑线白底 BW：白线黑底
+			this.dom       = params.dom
+			this.width     = params.width ? params.width : document.querySelector(this.dom).offsetWidth
+			this.height    = params.height ? params.height : document.querySelector(this.dom).offsetHeight
+			this.theme     = params.theme ? params.theme : 'WB' //WB：经典黑线白底 BW：白线黑底
 			this.lineWidth = params.lineWidth ? params.lineWidth : 1			
-			this.follow    = params.follow ? true : false;
+			this.follow    = params.follow ? true : false
 			this.console   = params.console == false ? false : true
+			this.eraser    = false
 			this.tmp       = {}
 			switch(this.theme){
 				case 'WB':				
