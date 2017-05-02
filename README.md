@@ -1,6 +1,6 @@
 添加工具 signature.createTools(params:{},fn:function(){}) 
  * 在signature.createTools中你可以自定义属于你的工具
- * icon中填下的类在http://fontawesome.dashgame.com 中寻找
+ * icon中填下的类在 http://fontawesome.dashgame.com 中寻找
 
 signature.createTools({
 
