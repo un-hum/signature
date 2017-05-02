@@ -64,6 +64,11 @@ _signature.prototype = {
 		this.pen.lineTo(x,y);
 		this.pen.stroke();		
 	},
+	createTools:function(params,fn){
+		var SIGNATURE = this
+		// 用户自定义添加工具
+		_signature.prototype[params.name] = fn || function(){alert('请添加方法!')}		
+	},
 	fnDown:function(event){
 		var e = event || window.event; 	
 		var x = e.clientX - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
@@ -116,6 +121,9 @@ _signature.prototype = {
 				_i.classList.add(tools[i].icon)
 				_i.classList.add('fa')
 				_i.innerHTML = '<span>' + tools[i].name + '</span>'
+				if(tools[i].class){
+					_i.classList.add(tools[i].class)
+				}				
 				if(tools[i].warning){
 					var warning = document.createElement('div')
 					warning.innerHTML = tools[i].warning
