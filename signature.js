@@ -14,7 +14,7 @@ var tools = [
 	{icon: 'fa-th-large',name: 'color',fn: 'signature.setColor(this)'},
 	{icon: 'fa-eraser',name: 'eraser',fn: 'signature.toggleEraser(this)'},
 	{icon: 'fa-paint-brush',name: 'paint-brush',fn: 'signature.setConfig("lineWidth",10,this)'},
-	{icon: 'fa-arrows-alt',name: 'arrows-alt',fn:'signature.resize(this,"all")'}
+	{icon: 'fa-arrows-alt',warning:'画板尺寸变化后，内容将丢失',name: 'arrows-alt',fn:'signature.resize(this,"all")'}
 ]
 
 var color_list = [
@@ -72,9 +72,10 @@ _signature.prototype = {
 		this.pen = this.canvas.getContext('2d')	
 		//绘制开始
 		this.pen.beginPath();
-		this.pen.strokeStyle = this.color;
-	    this.pen.fillStyle = this.bg;           
-	    this.pen.lineWidth = this.lineWidth;
+		this.pen.strokeStyle = document.querySelector('.fa-eraser').classList.contains('active') ? this.bg : this.color;      
+	    this.pen.lineWidth   = document.querySelector('.fa-eraser').classList.contains('active') ? this.lineWidth + 5 : this.lineWidth;
+		this.pen.shadowBlur  = 0.5;
+		this.pen.shadowColor = this.color;
 		this.pen.lineTo(x,y);
 
 		var _this = this
@@ -101,6 +102,9 @@ _signature.prototype = {
 		pen.fillStyle = this.tmp.bg
 		pen.fill();
 	},
+	toggleEraser(ele){
+		this.active(ele)
+	},
 	create:function(ele){
 		if(this.console){
 			var div = document.createElement('div')
@@ -112,6 +116,12 @@ _signature.prototype = {
 				_i.classList.add(tools[i].icon)
 				_i.classList.add('fa')
 				_i.innerHTML = '<span>' + tools[i].name + '</span>'
+				if(tools[i].warning){
+					var warning = document.createElement('div')
+					warning.innerHTML = tools[i].warning
+					warning.classList.add('signature-warning')
+					_i.appendChild(warning)
+				}
 				div.appendChild(_i)
 			}
 			document.querySelector(ele.dom).appendChild(div);
@@ -211,7 +221,7 @@ _signature.prototype = {
 			if(ele.classList.contains('active')){
 				ele.classList.remove('active')
 				document.querySelector(_this.dom).classList.remove('signature-full')
-				_this.canvas.width = _this.tmp.width
+				_this.canvas.width  = _this.tmp.width
 				_this.canvas.height = _this.console ? _this.tmp.height - 38 : _this.tmp.height;
 			}else{
 				ele.classList.add('active')
@@ -242,19 +252,19 @@ _signature.prototype = {
 			switch(this.theme){
 				case 'WB':				
 					this.color = 'black'
-					this.bg = 'white'
+					this.bg    = 'white'
 				break;
 				case 'BW':
 					this.color = 'white'
-					this.bg = 'black'				
+					this.bg    = 'black'				
 				break;
 				default:
 					this.color = 'black'
-					this.bg = 'white'	
+					this.bg    = 'white'	
 				break;
 			}
 			this.color = params.color ? params.color : this.color
-			this.bg = params.bg	? params.bg : this.bg		
+			this.bg    = params.bg	? params.bg : this.bg		
 
 			// 初始化canvas
 			this.create(this)

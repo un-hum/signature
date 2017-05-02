@@ -1,4 +1,9 @@
+.signature,#signature{
+	display: relative;
+}
+
 .signature-console{
+	pointer-events: auto;
 	min-height: calc(37px - 7px);
 	width: calc(100% - 10px);
 	background: white;
@@ -9,7 +14,7 @@
 
 .signature-console i{
 	border-radius: 5px;
-	padding: 4px;
+	padding: 3px 4px;
 	cursor:pointer;
 	display:block;
 	float:left;
@@ -17,14 +22,53 @@
 	margin-right:6px;
 	font-size:14px;
 	position: relative;
+	border:solid 1px transparent;
 }
 
 .signature-console span{
-	margin-left:8px
+	margin-left:8px;
+	position: relative;
+	display: inline-block;
+}
+
+.fa:hover .signature-warning{
+	display: block;
+}
+
+.signature-warning{
+	display: none;
+	padding: 5px;
+	color: black;
+	position: absolute;
+	left: 0;
+	top: 26px;
+	border: solid 1px #ccc;
+	background: white;
+	border-radius: 5px;
+	box-shadow: 3px 3px 1px .5px #ccc
+}
+
+.signature-warning:before{
+	content: '';
+	display: block;
+	width: 10px;
+	height: 10px;
+	background: white;
+	border-left: solid 1px #ccc;
+	border-top: solid 1px #ccc;	
+	position: absolute;
+	top: -6px;
+	left: 0;
+	right: 0;
+	margin: auto;
+	-webkit-transform:rotate(45deg);
+	-moz-transform:rotate(45deg);
+	transform:rotate(45deg);
 }
 
 .signature-console .active{
-	background: #edf0ee
+	background: #edf0ee;
+	border:solid 1px #ccc;
 }
 
 .signature-set-color{
@@ -73,3 +117,16 @@
 	-moz-transform:scale(1.1);	
 }
 
+.pointer-events-none{
+	pointer-events: none;
+}
+
+.eraser{
+	display: block;
+	z-index: 1000;
+	position: absolute;
+	border: solid 1px #ccc;
+	background: #fff;
+	border-radius: 50%;
+	cursor: pointer;
+}
