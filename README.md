@@ -16,7 +16,10 @@ signature.createTools({
     
 },function(){
 
-    //点击按钮你要干的事情
+    /*
+     * 点击按钮你要干的事情
+     * SIGNATURE可获取signature下的所有实例化参数
+     */
     
 })
 
