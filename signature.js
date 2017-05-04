@@ -64,10 +64,31 @@ _signature.prototype = {
 		this.pen.lineTo(x,y);
 		this.pen.stroke();		
 	},
-	createTools:function(params,fn){
-		var SIGNATURE = this
-		// 用户自定义添加工具
-		_signature.prototype[params.name] = fn || function(){alert('请添加方法!')}		
+	createTools:function(params,fn){		
+		if(!params){
+			alert('请填写相关参数')
+			return
+		}
+
+		if(this.console){		
+			var _SIGNATURE = this
+			// 用户自定义添加工具
+			var CONSOLE = document.querySelector('.signature-console')
+			var i = document.createElement('i')			
+			i.onclick = fn ? fn(_SIGNATURE) : function(){alert('请填写方法')};
+			i.innerHTML =  '<span>' + (params.name ? params.name : 'Untitled tool') + '</span>'
+			i.setAttribute('class',params.icon ? params.icon + ' fa' : 'fa-gear fa')
+			if(params.class){
+				i.classList.add(tools[i].class)
+			}				
+			if(params.warning){
+				var warning = document.createElement('div')
+				warning.innerHTML = params.warning
+				warning.classList.add('signature-warning')
+				i.appendChild(warning)
+			}				
+			CONSOLE.appendChild(i)
+		}		
 	},
 	fnDown:function(event){
 		var e = event || window.event; 	
@@ -148,7 +169,7 @@ _signature.prototype = {
 		}
 	},
 	active:function(ele,status,fn){
-		if(status){
+		if(status == true){
 			fn()
 		}else{
 			ele.classList.contains('active') ? ele.classList.remove('active') : ele.classList.add('active')
