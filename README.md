@@ -23,6 +23,8 @@ signature.createTools({
     
 })
 
+工具栏选中回调this.active
+
 演示地址：http://www.unhum.com
 
 近期版本预览：1.完善工具块,2.兼容移动端touch
