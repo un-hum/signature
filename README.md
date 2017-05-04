@@ -6,7 +6,7 @@
 
 signature.createTools({
 
-    icon:'', //填写font awesome类
+    icon:'', //填写font awesome类(默认类为fa-gear fa-spin)
 
     name:'', //定义的按钮名称
 
