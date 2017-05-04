@@ -14,10 +14,11 @@ signature.createTools({
 
     class:'', //选填 额外要添加的类
     
-},function(){
+},function(signature){
 
     /*
      * 点击按钮你要干的事情
+     * 默认有一个参数为signature，该参数可获取实例化下的所有对象属性和方法
      */
     
 })
