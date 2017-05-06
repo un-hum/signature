@@ -112,8 +112,9 @@ _signature.prototype = {
 	},
 	fnDown:function(event){
 		var e = event || window.event; 	
-		var x = e.clientX - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
-		var y = e.clientY - this.canvas.offsetTop + getScrollInfo('scrollTop');
+		_device == 1 ? (e = e.touches[0]) : e
+		var x = (_device == 0 ? e.clientX : e.pageX) - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
+		var y = (_device == 0 ? e.clientY : e.pageY) - this.canvas.offsetTop + getScrollInfo('scrollTop');
 		//初始化"画笔"
 		this.pen = this.canvas.getContext('2d')	
 		//绘制开始
@@ -138,7 +139,7 @@ _signature.prototype = {
 	},
 	fnUp:function(){
 		this.pen.closePath();			
-		document.onmousemove = '';
+		document.addEventListener(_device == 0 ? 'mousemove' : 'touchmove','')			
 	},
 	createArc:function(event){
 		var e = event || window.event
