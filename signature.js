@@ -126,12 +126,12 @@ _signature.prototype = {
 		var _this = this
 
 		//创建用户滑动轨迹
-		document.onmousemove = function(event){
+		document[_device == 0 ? 'onmousemove' : 'ontouchmove'] = function(event){
 			_this.fnMove(event)
 		}	
 
 		//终止签名
-		window.addEventListener('mouseup',function(){
+		window.addEventListener(_device == 0 ? 'mouseup' : 'touchend',function(){
 			_this.fnUp()
 		})	
 	},
@@ -326,8 +326,7 @@ _signature.prototype = {
 			getDevice()
 			console.log(_device)
 
-			this.canvas[_device == 0 ? 'onmousedown' : 'touchstart'] = function(event){			
-				alert(_device)
+			this.canvas[_device == 0 ? 'onmousedown' : 'ontouchstart'] = function(event){							
 				_this.fnDown(event)
 			}
 		}else{
