@@ -1,9 +1,4 @@
-.signature,#signature{
-	display: relative;
-}
-
 .signature-console{
-	pointer-events: auto;
 	min-height: calc(37px - 7px);
 	width: calc(100% - 10px);
 	background: white;

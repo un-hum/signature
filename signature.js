@@ -147,8 +147,6 @@ _signature.prototype = {
 
 		//终止签名
 		window.addEventListener(_device == 0 ? 'mouseup' : 'touchend',function(event){
-			//取消默认事件
-		    event.preventDefault()
 			_this.fnUp(event)
 		})	
 	},
@@ -342,9 +340,7 @@ _signature.prototype = {
 
 			getDevice()
 
-			this.canvas.addEventListener(_device == 0 ? 'mousedown' : 'touchstart',function(event){							
-				//取消默认事件
-			    event.preventDefault()				
+			this.canvas.addEventListener(_device == 0 ? 'mousedown' : 'touchstart',function(event){			
 				_this.fnDown(event)				
 			})
 		}else{
