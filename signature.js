@@ -119,8 +119,13 @@ _signature.prototype = {
 		this.pen = this.canvas.getContext('2d')	
 		//绘制开始
 		this.pen.beginPath();
-		this.pen.strokeStyle = document.querySelector('.fa-eraser').classList.contains('active') ? this.bg : this.color;      
-	    this.pen.lineWidth   = document.querySelector('.fa-eraser').classList.contains('active') ? this.lineWidth + 4 : this.lineWidth - 1;
+		if(document.querySelector('.fa-eraser')){
+			this.pen.strokeStyle = document.querySelector('.fa-eraser').classList.contains('active') ? this.bg : this.color;      
+	    	this.pen.lineWidth   = document.querySelector('.fa-eraser').classList.contains('active') ? this.lineWidth + 4 : this.lineWidth - 1;
+		}else{
+			this.pen.strokeStyle = this.color
+			this.pen.lineWidth = this.lineWidth - 1
+		}
 		this.pen.shadowBlur  = 1;
 		this.pen.shadowColor = this.color;
 		this.pen.lineTo(x,y);
