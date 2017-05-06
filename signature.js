@@ -77,9 +77,10 @@ _signature.prototype = {
 	fnMove:function(event){
 		var e = event || window.event;
 		//取消默认事件
-		e.preventDefault()
-		var x = e.clientX - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
-		var y = e.clientY - this.canvas.offsetTop + getScrollInfo('scrollTop');
+		if(_device == 0) e.preventDefault()		
+		_device == 1 ? (e = e.touches[0]) : e
+		var x = (_device == 0 ? e.clientX : e.pageX) - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
+		var y = (_device == 0 ? e.clientY : e.pageY) - this.canvas.offsetTop + getScrollInfo('scrollTop');
 		this.pen.lineTo(x,y);
 		this.pen.stroke();		
 	},
@@ -126,9 +127,9 @@ _signature.prototype = {
 		var _this = this
 
 		//创建用户滑动轨迹
-		document[_device == 0 ? 'onmousemove' : 'ontouchmove'] = function(event){
+		document.addEventListener(_device == 0 ? 'mousemove' : 'touchmove',function(event){
 			_this.fnMove(event)
-		}	
+		})
 
 		//终止签名
 		window.addEventListener(_device == 0 ? 'mouseup' : 'touchend',function(){
@@ -324,11 +325,10 @@ _signature.prototype = {
 			var _this = this
 
 			getDevice()
-			console.log(_device)
 
-			this.canvas[_device == 0 ? 'onmousedown' : 'ontouchstart'] = function(event){							
-				_this.fnDown(event)
-			}
+			this.canvas.addEventListener(_device == 0 ? 'mousedown' : 'touchstart',function(event){		
+				_this.fnDown(event)				
+			})
 		}else{
 			alert('please add Document')
 		}		
