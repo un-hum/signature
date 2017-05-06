@@ -1,9 +1,9 @@
 signature
 
 使用该插件需要引入
-    * http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css  //工具箱图标
-    * signature.css //基础样式
-    * signature.js //基础样式
+* http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css  //工具箱图标
+* signature.css //基础样式
+* signature.js //基础样式
 
 基本配置项 signature.init(params:{})
  * 初始化配置
