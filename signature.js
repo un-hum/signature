@@ -154,14 +154,15 @@ _signature.prototype = {
 		this.pen.closePath();			
 		document.onmousemove = '';
 	},
-	createArc:function(event){
-		var e = event || window.event
-		pen.beginPath();
-		pen.arc(e.clientX, e.clientY, this.tmp.lineWidth/2, 0, Math.PI * 2, true);
-		pen.closePath();
-		pen.fillStyle = this.tmp.bg
-		pen.fill();
-	},
+	// 创建触点
+	// createArc:function(event){
+	// 	var e = event || window.event
+	// 	pen.beginPath();
+	// 	pen.arc(e.clientX, e.clientY, this.tmp.lineWidth/2, 0, Math.PI * 2, true);
+	// 	pen.closePath();
+	// 	pen.fillStyle = this.tmp.bg
+	// 	pen.fill();
+	// },
 	toggleEraser(ele){
 		this.active(ele)
 	},
