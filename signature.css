@@ -10,6 +10,7 @@
 	text-align: left;
 	padding: 7px 5px 0px 5px;
 	border-bottom: solid 1px #ddd;
+	overflow: hidden;
 }
 
 .signature-console i{

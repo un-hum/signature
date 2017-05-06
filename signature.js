@@ -9,6 +9,8 @@ function _signature(){
 	this.console   = false;	
 }
 
+var _device = 0;//设备类型 0：pc，1：phone
+
 var tools = [
 	{icon: 'fa-refresh',name: 'refresh',fn: 'signature.refresh()'},
 	{icon: 'fa-th-large',name: 'color',fn: 'signature.setColor(this)'},
@@ -30,6 +32,23 @@ var color_list = [
 	{color: 'red',name: '红色'},
 	{color: '#b03060',name: '栗色'},
 ]
+
+function getDevice() {
+  var sUserAgent = navigator.userAgent.toLowerCase();
+  var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+  var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+  var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+  var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+  var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+  var bIsAndroid = sUserAgent.match(/android/i) == "android";
+  var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+  var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+  if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+    _device = 1
+  } else {
+    _device = 0
+  }
+}
 
 // 获取滚动条信息
 function getScrollInfo(params){  
@@ -304,7 +323,11 @@ _signature.prototype = {
 			}		
 			var _this = this
 
-			this.canvas.onmousedown = function(event){			
+			getDevice()
+			console.log(_device)
+
+			this.canvas[_device == 0 ? 'onmousedown' : 'touchstart'] = function(event){			
+				alert(_device)
 				_this.fnDown(event)
 			}
 		}else{
