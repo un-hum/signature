@@ -33,6 +33,7 @@ var color_list = [
 	{color: '#b03060',name: '栗色'},
 ]
 
+//获取当前设备
 function getDevice() {
   var sUserAgent = navigator.userAgent.toLowerCase();
   var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
@@ -76,7 +77,7 @@ function stopBubble(e){
 _signature.prototype = {
 	fnMove:function(event){
 		var e = event || window.event;
-		_device == 1 ? (e = e.touches[0]) : e
+		if(_device == 1) e = e.touches[0]
 		var x = (_device == 0 ? e.clientX : e.pageX) - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
 		var y = (_device == 0 ? e.clientY : e.pageY) - this.canvas.offsetTop + getScrollInfo('scrollTop');
 		this.pen.lineTo(x,y);
@@ -109,15 +110,15 @@ _signature.prototype = {
 		}		
 	},
 	fnDown:function(event){
-		var e = event || window.event; 			
-		_device == 1 ? (e = e.touches[0]) : e
+		var e = event || window.event; 	
+		if(_device == 1) e = e.touches[0]
 		var x = (_device == 0 ? e.clientX : e.pageX) - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
 		var y = (_device == 0 ? e.clientY : e.pageY) - this.canvas.offsetTop + getScrollInfo('scrollTop');
 		//初始化"画笔"
 		this.pen = this.canvas.getContext('2d')	
 		//绘制开始
 		this.pen.beginPath();
-		if(document.querySelector('.fa-eraser')){
+		if(document.querySelector('.signature-console')){
 			this.pen.strokeStyle = document.querySelector('.fa-eraser').classList.contains('active') ? this.bg : this.color;      
 	    	this.pen.lineWidth   = document.querySelector('.fa-eraser').classList.contains('active') ? this.lineWidth + 4 : this.lineWidth - 1;
 		}else{
@@ -126,27 +127,34 @@ _signature.prototype = {
 		}
 		this.pen.shadowBlur  = 1;
 		this.pen.shadowColor = this.color;
+		
+		if(document.querySelector('.signature-console')){
+			document.querySelector('.fa-eraser').classList.contains('active') ? this.pen.shadowColor = this.bg : this.pen.shadowColor = this.color
+		}
+
 		this.pen.lineTo(x,y);
 
 		var _this = this
 
 		//创建用户滑动轨迹
-		document.addEventListener(_device == 0 ? 'mousemove' : 'touchmove',function(event){
+		_device == 0 ? document.onmousemove = function(event){
+			_this.fnMove(event)
+		} : document.addEventListener('touchmove',function(event){
 			//取消默认事件
 		    event.preventDefault()		
 			_this.fnMove(event)
 		})
 
 		//终止签名
-		window.addEventListener(_device == 0 ? 'mouseup' : 'touchend',function(){
+		window.addEventListener(_device == 0 ? 'mouseup' : 'touchend',function(event){
 			//取消默认事件
 		    event.preventDefault()
-			_this.fnUp()
+			_this.fnUp(event)
 		})	
 	},
 	fnUp:function(){
 		this.pen.closePath();			
-		document.addEventListener(_device == 0 ? 'mousemove' : 'touchmove','')			
+		document.onmousemove = '';
 	},
 	createArc:function(event){
 		var e = event || window.event
