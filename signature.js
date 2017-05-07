@@ -118,9 +118,9 @@ _signature.prototype = {
 		this.pen = this.canvas.getContext('2d')	
 		//绘制开始
 		this.pen.beginPath();
-		if(document.querySelector('.signature-console')){
-			this.pen.strokeStyle = document.querySelector('.fa-eraser').classList.contains('active') ? this.bg : this.color;      
-	    	this.pen.lineWidth   = document.querySelector('.fa-eraser').classList.contains('active') ? this.lineWidth + 4 : this.lineWidth - 1;
+		if(document.querySelector(this.dom).querySelector('.signature-console')){
+			this.pen.strokeStyle = document.querySelector(this.dom).querySelector('.fa-eraser').classList.contains('active') ? this.bg : this.color;      
+	    	this.pen.lineWidth   = document.querySelector(this.dom).querySelector('.fa-eraser').classList.contains('active') ? this.lineWidth + 4 : this.lineWidth - 1;
 		}else{
 			this.pen.strokeStyle = this.color
 			this.pen.lineWidth = this.lineWidth - 1
@@ -128,8 +128,8 @@ _signature.prototype = {
 		this.pen.shadowBlur  = 1;
 		this.pen.shadowColor = this.color;
 		
-		if(document.querySelector('.signature-console')){
-			document.querySelector('.fa-eraser').classList.contains('active') ? this.pen.shadowColor = this.bg : this.pen.shadowColor = this.color
+		if(document.querySelector(this.dom).querySelector('.signature-console')){
+			document.querySelector(this.dom).querySelector('.fa-eraser').classList.contains('active') ? this.pen.shadowColor = this.bg : this.pen.shadowColor = this.color
 		}
 
 		this.pen.lineTo(x,y);
@@ -219,10 +219,10 @@ _signature.prototype = {
 				ele.classList.remove('select')
 				_this.color = _this.tmp.color
 		}() : function(){
-			for(var i = 0;i < document.querySelectorAll('.signature-set-color > div').length;i++){
-				document.querySelectorAll('.signature-set-color > div')[i].classList.remove('select')	
+			for(var i = 0;i < document.querySelector(_this.dom).querySelectorAll('.signature-set-color > div').length;i++){
+				document.querySelector(_this.dom).querySelectorAll('.signature-set-color > div')[i].classList.remove('select')	
 			}
-			document.querySelector('.signature-set-color').style.display = 'none';
+			document.querySelector(_this.dom).querySelector('.signature-set-color').style.display = 'none';
 			_this.color = color
 			ele.classList.add('select')
 		}()
@@ -341,7 +341,9 @@ _signature.prototype = {
 
 			getDevice()
 
-			this.canvas.addEventListener(_device == 0 ? 'mousedown' : 'touchstart',function(event){			
+			this.canvas.addEventListener(_device == 0 ? 'mousedown' : 'touchstart',function(event){	
+				//取消默认事件
+		    	event.preventDefault()			
 				_this.fnDown(event)				
 			})
 		}else{
