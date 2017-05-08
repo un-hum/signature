@@ -51,8 +51,6 @@ signature2.init({
 	
 })	
 
-工具栏选中回调this.active
-
 演示地址：http://www.unhum.com
 
 未来版本预览：1.集成vue2,2.集成angular
