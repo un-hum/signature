@@ -53,4 +53,4 @@ signature2.init({
 
 演示地址：http://www.unhum.com
 
-未来版本预览：1.集成vue2,2.集成angular
+未来版本预览：1.集成vue2
