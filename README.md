@@ -1,9 +1,9 @@
 signature
 
 使用该插件需要引入
-* http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css  //工具箱图标
-* signature.css //基础样式
-* signature.js //基础样式
+ * http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css  //工具箱图标
+ * signature.css //基础样式
+ * signature.js //基础样式
 
 基本配置项 signature.init(params:{})
  * 初始化配置
@@ -39,12 +39,12 @@ signature.createTools({
     
 })
 
+
+
 工具栏选中回调this.active
 
 演示地址：http://www.unhum.com
 
 近期版本预览：1.完善工具块,2.兼容移动端touch
 
-未来版本预览：1.集成vue2,2.集成angular,3.支持多个签名板
-
-注意：1.当前版本页面中最多定义一个
+未来版本预览：1.集成vue2,2.集成angular
