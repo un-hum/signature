@@ -39,7 +39,17 @@ signature.createTools({
     
 })
 
+多个签名板
+ * 创建多个签名板时要注意第二个签名板必填tname参数
 
+var signature2 = new _signature()
+
+signature2.init({
+
+	dom:'.signature2',
+	tname:'signature2' //指定所属
+	
+})	
 
 工具栏选中回调this.active
 
