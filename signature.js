@@ -4,6 +4,7 @@ function _signature(){
 	this.width     = 0;
 	this.height    = 0;
 	this.color     = '';
+	this.tname     = '';
 	this.lineWidth = 0;
 	this.follow    = false;
 	this.console   = false;	
@@ -12,11 +13,11 @@ function _signature(){
 var _device = 0;//设备类型 0：pc，1：phone
 
 var tools = [
-	{icon: 'fa-refresh',name: 'refresh',fn: 'signature.refresh()'},
-	{icon: 'fa-th-large',name: 'color',fn: 'signature.setColor(this)'},
-	{icon: 'fa-eraser',name: 'eraser',fn: 'signature.toggleEraser(this)'},
-	{icon: 'fa-paint-brush',name: 'paint-brush',fn: 'signature.setConfig("lineWidth",10,this)'},
-	{icon: 'fa-arrows-alt',warning:'画板尺寸变化后，内容将丢失',name: 'arrows-alt',fn:'signature.resize(this,"all")'}
+	{icon: 'fa-refresh',name: 'refresh',fn: 'refresh()'},
+	{icon: 'fa-th-large',name: 'color',fn: 'setColor(this)'},
+	{icon: 'fa-eraser',name: 'eraser',fn: 'toggleEraser(this)'},
+	{icon: 'fa-paint-brush',name: 'paint-brush',fn: 'setConfig("lineWidth",10,this)'},
+	{icon: 'fa-arrows-alt',warning:'画板尺寸变化后，内容将丢失',name: 'arrows-alt',fn:'resize(this,"all")'}
 ]
 
 var color_list = [
@@ -92,7 +93,7 @@ _signature.prototype = {
 		if(this.console){		
 			var _SIGNATURE = this
 			// 用户自定义添加工具
-			var CONSOLE = document.querySelector('.signature-console')
+			var CONSOLE = document.querySelector(this.dom).querySelector('.signature-console')
 			var i = document.createElement('i')			
 			i.onclick = fn ? fn(_SIGNATURE) : function(){alert('请填写方法')};
 			i.innerHTML =  '<span>' + (params.name ? params.name : 'Untitled tool') + '</span>'
@@ -111,25 +112,28 @@ _signature.prototype = {
 	},
 	fnDown:function(event){
 		var e = event || window.event; 	
+		var _dom = document.querySelector(this.dom)
+
 		if(_device == 1) e = e.touches[0]
+
 		var x = (_device == 0 ? e.clientX : e.pageX) - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
 		var y = (_device == 0 ? e.clientY : e.pageY) - this.canvas.offsetTop + getScrollInfo('scrollTop');
 		//初始化"画笔"
 		this.pen = this.canvas.getContext('2d')	
 		//绘制开始
 		this.pen.beginPath();
-		if(document.querySelector(this.dom).querySelector('.signature-console')){
-			this.pen.strokeStyle = document.querySelector(this.dom).querySelector('.fa-eraser').classList.contains('active') ? this.bg : this.color;      
-	    	this.pen.lineWidth   = document.querySelector(this.dom).querySelector('.fa-eraser').classList.contains('active') ? this.lineWidth + 4 : this.lineWidth - 1;
+		if(_dom.querySelector('.signature-console')){
+			this.pen.strokeStyle = _dom.querySelector('.fa-eraser').classList.contains('active') ? this.bg : this.color;      
+	    	this.pen.lineWidth   = _dom.querySelector('.fa-eraser').classList.contains('active') ? this.lineWidth + 4 : this.lineWidth - 1;
 		}else{
 			this.pen.strokeStyle = this.color
-			this.pen.lineWidth = this.lineWidth - 1
+			this.pen.lineWidth   = this.lineWidth - 1
 		}
 		this.pen.shadowBlur  = 1;
 		this.pen.shadowColor = this.color;
 		
-		if(document.querySelector(this.dom).querySelector('.signature-console')){
-			document.querySelector(this.dom).querySelector('.fa-eraser').classList.contains('active') ? this.pen.shadowColor = this.bg : this.pen.shadowColor = this.color
+		if(_dom.querySelector('.signature-console')){
+			_dom.querySelector('.fa-eraser').classList.contains('active') ? this.pen.shadowColor = this.bg : this.pen.shadowColor = this.color
 		}
 
 		this.pen.lineTo(x,y);
@@ -167,13 +171,14 @@ _signature.prototype = {
 		this.active(ele)
 	},
 	create:function(ele){
+		var _this = this
 		if(this.console){
 			var div = document.createElement('div')
 			div.classList.add('signature-console')
 			// 初始化工具栏
 			for(var i = 0;i<tools.length;i++){
 				var _i = document.createElement('i')
-				_i.setAttribute('onclick',tools[i].fn)
+				_i.setAttribute('onclick',_this.tname + '.' + tools[i].fn)				
 				_i.classList.add(tools[i].icon)
 				_i.classList.add('fa')
 				_i.innerHTML = '<span>' + tools[i].name + '</span>'
@@ -219,26 +224,29 @@ _signature.prototype = {
 				ele.classList.remove('select')
 				_this.color = _this.tmp.color
 		}() : function(){
-			for(var i = 0;i < document.querySelector(_this.dom).querySelectorAll('.signature-set-color > div').length;i++){
-				document.querySelector(_this.dom).querySelectorAll('.signature-set-color > div')[i].classList.remove('select')	
+			var _dom = document.querySelector(_this.dom)
+			for(var i = 0;i < _dom.querySelectorAll('.signature-set-color > div').length;i++){
+				_dom.querySelectorAll('.signature-set-color > div')[i].classList.remove('select')	
 			}
-			document.querySelector(_this.dom).querySelector('.signature-set-color').style.display = 'none';
+			_dom.querySelector('.signature-set-color').style.display = 'none';			
 			_this.color = color
 			ele.classList.add('select')
 		}()
 	},
 	setColor:function(ele){
+		var _this = this
+		var signature_set_color = ele.querySelector('.signature-set-color')
 		// 添加样式
 		this.active(ele,true,function(){
-			if(document.querySelector('.signature-set-color .select')){
-				ele.querySelector('.signature-set-color').style.display = 'block'
+			if(ele.querySelector('.signature-set-color .select')){
+				signature_set_color.style.display = 'block'
 			}else{
 				ele.classList.contains('active') ? ele.classList.remove('active') : ele.classList.add('active')
 			}
 		})
 		if(ele.classList.contains('active')){		
-			if(ele.querySelector('.signature-set-color')){
-				ele.querySelector('.signature-set-color').style.display = 'block'
+			if(signature_set_color){
+				signature_set_color.style.display = 'block'
 			}else{
 				// 创建颜色框
 				var div = document.createElement('div')		
@@ -248,14 +256,14 @@ _signature.prototype = {
 					var color = document.createElement('div')
 					color.classList.add('color')
 					color.title = color_list[i].name
-					color.setAttribute('onclick','signature.selectColor(this,"' + color_list[i].color + '",event)')
+					color.setAttribute('onclick',this.tname + '.selectColor(this,"' + color_list[i].color + '",event)')
 					color.style.background = color_list[i].color				
 					div.appendChild(color)
 				}
 				ele.appendChild(div)
 			}
 		}else{		
-			ele.querySelector('.signature-set-color').style.display = 'none'
+			signature_set_color.style.display = 'none'
 			this.color = this.tmp.color
 		}
 	},
@@ -282,20 +290,21 @@ _signature.prototype = {
 	resize:function(ele,w,j){
 		var _this = this
 		_this.active(ele,true,function(){
+			var _dom = document.querySelector(_this.dom)
 			if(ele.classList.contains('active')){
 				ele.classList.remove('active')
-				document.querySelector(_this.dom).classList.remove('signature-full')
+				_dom.classList.remove('signature-full')
 				_this.canvas.width  = _this.tmp.width
 				_this.canvas.height = _this.console ? _this.tmp.height - 38 : _this.tmp.height;
 			}else{
 				ele.classList.add('active')
 				if(w == 'all'){
-					document.querySelector(_this.dom).classList.add('signature-full')
+					_dom.classList.add('signature-full')
 					_this.canvas.width  = document.documentElement.clientWidth
 					_this.canvas.height = document.documentElement.clientHeight - 38
 				}else{
-					document.querySelector(_this.dom).style.width  = w;
-					document.querySelector(_this.dom).style.height = h;
+					_dom.style.width  = w;
+					_dom.style.height = h;
 					_this.canvas.width  = document.documentElement.clientWidth
 					_this.canvas.height = document.documentElement.clientHeight - 38
 				}				
@@ -312,6 +321,7 @@ _signature.prototype = {
 			this.follow    = params.follow ? true : false
 			this.console   = params.console == false ? false : true
 			this.eraser    = false
+			this.tname     = params.tname ? params.tname : 'signature'
 			this.tmp       = {}
 			switch(this.theme){
 				case 'WB':				
