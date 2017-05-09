@@ -47,7 +47,7 @@ var signature2 = new _signature()
 signature2.init({
 
 	dom:'.signature2',
-	tname:'signature2' //指定所属
+	tname:'signature2' //指定所属(与实例化变量一致)
 	
 })	
 
