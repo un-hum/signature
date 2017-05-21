@@ -79,8 +79,12 @@ _signature.prototype = {
 	fnMove:function(event){
 		var e = event || window.event;
 		if(_device == 1) e = e.touches[0]
-		var x = (_device == 0 ? e.clientX : e.pageX) - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
-		var y = (_device == 0 ? e.clientY : e.pageY) - this.canvas.offsetTop + getScrollInfo('scrollTop');
+		var position = {
+			left:document.querySelector(this.dom).offsetLeft,
+			top :this.canvas.offsetTop
+		}
+		var x = (_device == 0 ? e.clientX : e.pageX) - position.left + getScrollInfo('scrollLeft');
+		var y = (_device == 0 ? e.clientY : e.pageY) - position.top + getScrollInfo('scrollTop');
 		this.pen.lineTo(x,y);
 		this.pen.stroke();		
 	},
@@ -113,11 +117,14 @@ _signature.prototype = {
 	fnDown:function(event){
 		var e = event || window.event; 	
 		var _dom = document.querySelector(this.dom)
-
+		var position = {
+			left:document.querySelector(this.dom).offsetLeft,
+			top :this.canvas.offsetTop
+			// - (this.console ? : 0)
+		}
 		if(_device == 1) e = e.touches[0]
-
-		var x = (_device == 0 ? e.clientX : e.pageX) - this.canvas.offsetLeft + getScrollInfo('scrollLeft');
-		var y = (_device == 0 ? e.clientY : e.pageY) - this.canvas.offsetTop + getScrollInfo('scrollTop');
+		var x = (_device == 0 ? e.clientX : e.pageX) - position.left + getScrollInfo('scrollLeft');
+		var y = (_device == 0 ? e.clientY : e.pageY) - position.top + getScrollInfo('scrollTop');
 		//初始化"画笔"
 		this.pen = this.canvas.getContext('2d')	
 		//绘制开始
@@ -194,12 +201,14 @@ _signature.prototype = {
 				div.appendChild(_i)
 			}
 			document.querySelector(ele.dom).appendChild(div);
+			//记录控制台高度
+			_this.consoleHeight = document.querySelector(this.dom).querySelector('.signature-console').clientHeight
 		}
 		var c = document.createElement('canvas');
 		c.innerHTML = '请升级您的浏览器或者更换您的浏览器。';		
 		c.style.background = ele.bg
 		c.width = ele.width;
-		c.height = this.console ? ele.height - 38 : ele.height;
+		c.height = this.console ? ele.height - _this.consoleHeight : ele.height;
 		document.querySelector(ele.dom).appendChild(c);
 		ele.canvas = c
 	},
@@ -295,34 +304,35 @@ _signature.prototype = {
 				ele.classList.remove('active')
 				_dom.classList.remove('signature-full')
 				_this.canvas.width  = _this.tmp.width
-				_this.canvas.height = _this.console ? _this.tmp.height - 38 : _this.tmp.height;
+				_this.canvas.height = _this.console ? _this.tmp.height - _this.consoleHeight : _this.tmp.height;
 			}else{
 				ele.classList.add('active')
 				if(w == 'all'){
 					_dom.classList.add('signature-full')
 					_this.canvas.width  = document.documentElement.clientWidth
-					_this.canvas.height = document.documentElement.clientHeight - 38
+					_this.canvas.height = document.documentElement.clientHeight
 				}else{
 					_dom.style.width  = w;
 					_dom.style.height = h;
 					_this.canvas.width  = document.documentElement.clientWidth
-					_this.canvas.height = document.documentElement.clientHeight - 38
+					_this.canvas.height = document.documentElement.clientHeight
 				}				
 			}
 		})		
 	},
 	init:function(params){
 		if(params.dom){		
-			this.dom       = params.dom
-			this.width     = params.width ? params.width : document.querySelector(this.dom).offsetWidth
-			this.height    = params.height ? params.height : document.querySelector(this.dom).offsetHeight
-			this.theme     = params.theme ? params.theme : 'WB' //WB：经典黑线白底 BW：白线黑底
-			this.lineWidth = params.lineWidth ? params.lineWidth : 1			
-			this.follow    = params.follow ? true : false
-			this.console   = params.console == false ? false : true
-			this.eraser    = false
-			this.tname     = params.tname ? params.tname : 'signature'
-			this.tmp       = {}
+			this.dom           = params.dom
+			this.width         = params.width ? params.width : document.querySelector(this.dom).offsetWidth
+			this.height        = params.height ? params.height : document.querySelector(this.dom).offsetHeight
+			this.theme         = params.theme ? params.theme : 'WB' //WB：经典黑线白底 BW：白线黑底
+			this.lineWidth     = params.lineWidth ? params.lineWidth : 1			
+			this.follow        = params.follow ? true : false
+			this.console       = params.console == false ? false : true
+			this.consoleHeight = 0
+			this.eraser        = false
+			this.tname         = params.tname ? params.tname : 'signature'
+			this.tmp           = {}
 			switch(this.theme){
 				case 'WB':				
 					this.color = 'black'
