@@ -41,6 +41,7 @@
 	border: solid 1px #ccc;
 	background: white;
 	border-radius: 5px;
+	z-index: 1;
 	box-shadow: 3px 3px 1px .5px #ccc
 }
 

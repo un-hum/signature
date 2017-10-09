@@ -8,12 +8,9 @@
 		<link rel="stylesheet" href="signature.css">
 		<script src="signature.js"></script>	
 		<style>
-			.col-top-20{
-				margin-top: 20px;
-			}
-
-			body{
-				background: #ccc
+			body, html{
+				background: #ccc;
+				height: 100%;
 			}
 
 			*{
@@ -23,8 +20,8 @@
 
 			.signature-div{
 				height: 500px;
-				width: 300px;
-				margin:30px auto;
+				width: 80%;
+				margin:auto;
 			}			
 
 
@@ -34,15 +31,15 @@
 		</style>		
 	</head>
 	<body>
-		<div class="signature-div signature col-top-20"></div>	
-		<div class="signature-div signature2 col-top-20"></div>					
+		<div class="signature-div signature"></div>			
 		<script>
 			signature.init({
 				dom:'.signature'	
 			})		
 			signature.createTools({
-				icon:'fa-gear'
-			})		
+				icon:'fa-gear',
+				warning: '该按钮用于测试'
+			},function(){ alert('测试') })		
 		</script>		
 	</body>
 </html>
