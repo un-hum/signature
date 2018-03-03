@@ -53,4 +53,4 @@ signature2.init({
 	
 })	
 
-演示地址：http://www.unhum.com
+演示地址：http://W01.coding.me/signature
