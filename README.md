@@ -5,6 +5,8 @@ signature
  * signature.css //样式
  * signature.js //js
 
+实例化signature var signature = new _signature()
+
 基本配置项 signature.init(params:{})
  * 初始化配置
 
@@ -51,4 +53,4 @@ signature2.init({
 	
 })	
 
-演示地址：http://www.unhum.com
+演示地址：http://W01.coding.me/signature
