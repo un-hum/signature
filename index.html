@@ -5,8 +5,8 @@
 		<title>signature</title>
 		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 		<link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">		
-		<link rel="stylesheet" href="signature.css">
-		<script src="signature.js"></script>	
+		<link rel="stylesheet" href="signature.min.css">
+		<script src="signature.min.js"></script>	
 		<style>
 			body, html{
 				background: #ccc;
@@ -37,6 +37,7 @@
 	<body>
 		<div class="signature-div signature top-20"></div>			
 		<script>
+			var signature = new _signature();
 			signature.init({
 				dom:'.signature'	
 			})		
