@@ -1,5 +1,5 @@
 "use strict";
-function _signature() {
+function signature() {
 	this.dom = {};
 	this.width = 0;
 	this.height = 0;
